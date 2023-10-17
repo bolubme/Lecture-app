@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture</title>
+
+    <!-- Vendor CSS Files -->
+    <link
+      rel="stylesheet"
+      href="assets/vendor/bootstrap/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+
+    <!-- Main Css File -->
+    <link rel="stylesheet" href="assets/style.css" />
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+  </head>
+  <body>
+    <!-- Vue App -->
+    <div id="app">
+      <!-- ======= NavBar Section ======= -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid justify-content-between">
+          <!-- Left elements -->
+          <div class="d-flex">
+            <!-- Brand -->
+            <a class="navbar-brand me-2 mb-1 d-flex align-items-center"
+              >LECTURE</a
+            >
+          </div>
+          <!-- Left elements -->
+
+          <!-- Center elements -->
+          <ul class="navbar-nav flex-row d-md-flex">
+            <!-- Search form -->
+            <form class="input-group w-auto my-auto d-sm-flex">
+              <input
+                autocomplete="off"
+                type="search"
+                class="form-control rounded"
+                placeholder="Search"
+                style="min-width: 125px"
+              />
+              <span class="input-group-text border-0 d-lg-flex"
+                ><i class="fas fa-search"></i
+              ></span>
+            </form>
+          </ul>
+          <!-- Center elements -->
+
+          <!-- Right elements -->
+          <ul class="navbar-nav flex-row">
+            <a class="text-reset me-3" href="#">
+              <button class="checkout">
+                Checkout <i class="fas fa-shopping-cart"></i>
+                <span class="cartNumber">1</span>
+              </button>
+            </a>
+          </ul>
+          <!-- Right elements -->
+        </div>
+      </nav>
+      <!-- ======= NavBar Section Ends ======= -->
+
+      <div class="header">LIST OF LECTURES</div>
+
+      <!-- ======= Product Section ======= -->
+      <section id="products" class="products">
+        <di
+        v class="container">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 d-flex">
+              <div class="lecture">
+                <img src="assets/images/science.png" class="img-fluid" alt="" />
+                <div class="lecture-details">
+                  <h2>Science</h2>
+                  <h6>Location: <span>London</span></h6>
+                  <h6>Price: <span>£100</span></h6>
+                </div>
+                <button class="btn">Add to Cart</button>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 d-flex">
+              <div class="lecture">
+                <img src="assets/images/maths.png" class="img-fluid" alt="" />
+                <div class="lecture-details">
+                  <h2>Maths</h2>
+                  <h6>Location: <span>Oxford</span></h6>
+                  <h6>Price: <span>£100</span></h6>
+                </div>
+                <button class="btn">Add to Cart</button>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 d-flex">
+              <div class="lecture">
+                <img src="assets/images/english.png" class="img-fluid" alt="" />
+                <div class="lecture-details">
+                  <h2>English</h2>
+                  <h6>Location: <span>London</span></h6>
+                  <h6>Price: <span>£100</span></h6>
+                </div>
+                <button class="btn">Add to Cart</button>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 d-flex">
+              <div class="lecture">
+                <img src="assets/images/maths.png" class="img-fluid" alt="" />
+                <div class="lecture-details">
+                  <h2>Maths</h2>
+                  <h6>Location: <span>London</span></h6>
+                  <h6>Price: <span>£100</span></h6>
+                </div>
+                <button class="btn">Add to Cart</button>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 d-flex">
+              <div class="lecture">
+                <img src="assets/images/english.png" class="img-fluid" alt="" />
+                <div class="lecture-details">
+                  <h2>English</h2>
+                  <h6>Location: <span>York</span></h6>
+                  <h6>Price: <span>£100</span></h6>
+                </div>
+                <button class="btn">Add to Cart</button>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 d-flex">
+              <div class="lecture">
+                <img src="assets/images/science.png" class="img-fluid" alt="" />
+                <div class="lecture-details">
+                  <h2>Science</h2>
+                  <h6>Location: <span>Bristol</span></h6>
+                  <h6>Price: <span>£90</span></h6>
+                </div>
+                <button class="btn">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Product Section -->
+    </div>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Main Js File -->
+    <script src="assets/script.js"></script>
+  </body>
+</html>

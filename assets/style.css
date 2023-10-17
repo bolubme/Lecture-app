@@ -1,0 +1,61 @@
+/*--------------------------------------------------------------
+# Product Section
+--------------------------------------------------------------*/
+.products {
+  margin-top: 50px;
+}
+
+.lecture {
+  text-align: left;
+  margin-bottom: 20px;
+  background: #fff;
+  border: 1px solid #eef0ef;
+}
+
+.lecture img {
+  margin: -1px -1px 30px -1px;
+}
+
+.lecture .lecture-details {
+  padding: 0 20px 30px 20px;
+}
+
+.lecture h2 {
+  font-weight: 700;
+  margin-bottom: 2px;
+  font-size: 34px;
+}
+
+.lecture .btn {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.lecture .btn:hover {
+  background-color: #fab300;
+}
+
+.fa-shopping-cart {
+  color: black;
+  font-size: 30px;
+}
+
+.cartNumber {
+  color: black;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bolder;
+  border-radius: 50%;
+}
+
+.checkout {
+  border: none;
+  background-color: white;
+  color: black;
+  padding: 7px;
+  border-radius: 15px;
+}
+
+.checkout:hover {
+  background-color: #fab300;
+}
