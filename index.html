@@ -55,9 +55,9 @@
           <!-- Right elements -->
           <ul class="navbar-nav flex-row">
             <a class="text-reset me-3" href="#">
-              <button class="checkout">
+              <button v-on:click="showCheckout" class="checkout">
                 Checkout <i class="fas fa-shopping-cart"></i>
-                <span class="cartNumber">1</span>
+                <span class="cartNumber">{{cartItemCount}}</span>
               </button>
             </a>
           </ul>
@@ -66,22 +66,30 @@
       </nav>
       <!-- ======= NavBar Section Ends ======= -->
 
-      <div class="header">LIST OF LECTURES</div>
+      <!-- ======= Header ======= -->
+      <div class="header">
+        <h1 v-text="siteheader"></h1>
+      </div>
+      <!-- ======= Headers End ======= -->
 
       <!-- ======= Product Section ======= -->
       <section id="products" class="products">
-        <di
-        v class="container">
+        <div class="container" v-if="showProduct">
           <div class="row">
             <div class="col-lg-4 col-md-6 d-flex">
               <div class="lecture">
                 <img src="assets/images/science.png" class="img-fluid" alt="" />
                 <div class="lecture-details">
-                  <h2>Science</h2>
-                  <h6>Location: <span>London</span></h6>
-                  <h6>Price: <span>£100</span></h6>
+                  <h2 v-text="product.subject"></h2>
+                  <h6>Location: <span v-text="product.location"></span></h6>
+                  <h6>Price: <span v-text="product.price"></span></h6>
                 </div>
-                <button class="btn">Add to Cart</button>
+                <button class="btn" v-on:click="addToCart" v-if="canAddToCart">
+                  Add to Cart
+                </button>
+                <button class="btn" disabled="disabled" v-else>
+                  Add to Cart
+                </button>
               </div>
             </div>
 
