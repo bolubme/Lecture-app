@@ -11,6 +11,16 @@ var webstore = new Vue({
       availableInventory: 5,
     },
     showProduct: true,
+    order: {
+      firstName: "",
+      lastName: "",
+      address: "",
+      city: "",
+      zip: "",
+      state: "",
+      method: "Home",
+      gift: false,
+    },
     cart: [],
   },
   methods: {
@@ -19,6 +29,9 @@ var webstore = new Vue({
     },
     showCheckout() {
       this.showProduct = this.showProduct ? false : true;
+    },
+    submitForm() {
+      alert("Order Submitted!");
     },
   },
   computed: {
