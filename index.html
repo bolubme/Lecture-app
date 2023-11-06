@@ -59,19 +59,63 @@
       </nav>
       <!-- ======= NavBar Section Ends ======= -->
 
-      <!-- ======= Header ======= -->
-      <div class="header">
-        <h1 v-text="siteheader"></h1>
-      </div>
-      <!-- ======= Headers End ======= -->
-
       <section id="products" class="products">
-        <!-- ======= Product Section ======= -->
         <div class="container" v-if="showProduct">
+          <!-- ======= Sorting section ======= -->
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label for="sortSelect">Sort By:</label>
+              <select id="sortSelect" class="form-control" v-model="sortField">
+                <option value="Location">Location</option>
+                <option value="Price">Price</option>
+                <option value="Subject">Subject</option>
+                <option value="Spaces">Spaces</option>
+                <option value="Rating">Rating</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label>Filter By:</label>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="filterOption"
+                  id="filterAscending"
+                  value="ascending"
+                  v-model="filterOption"
+                />
+                <label class="form-check-label" for="filterAscending"
+                  >Ascending</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="filterOption"
+                  id="filterDescending"
+                  value="descending"
+                  v-model="filterOption"
+                />
+                <label class="form-check-label" for="filterDescending"
+                  >Descending</label
+                >
+              </div>
+            </div>
+          </div>
+          <!-- ======= Sorting section Ends ======= -->
+          <!-- ======= Product Cards ======= -->
           <div class="row">
-            <div v-for="product in products" class="col-lg-4 col-md-6 d-flex">
+            <div
+              v-for="product in sortedProducts"
+              class="col-lg-4 col-md-6 d-flex"
+            >
               <div class="lecture">
-                <img src="assets/images/science.png" class="img-fluid" alt="" />
+                <img
+                  :src="product.image"
+                  :alt="product.subject"
+                  class="img-fluid"
+                />
                 <div class="lecture-details">
                   <h2 v-text="product.subject"></h2>
                   <h6>Location: <span v-text="product.location"></span></h6>
@@ -104,6 +148,7 @@
               </div>
             </div>
           </div>
+          <!-- ======= Product Cards Ends======= -->
         </div>
 
         <!-- Checkout page  -->
