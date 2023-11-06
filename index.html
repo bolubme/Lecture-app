@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lecture</title>
+    <title> </title>
 
     <!-- Vendor CSS Files -->
     <link
@@ -18,6 +18,7 @@
     <!-- Main Css File -->
     <link rel="stylesheet" href="assets/style.css" />
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <script src="assets/products.js"></script>
   </head>
   <body>
     <!-- Vue App -->
@@ -68,7 +69,7 @@
         <!-- ======= Product Section ======= -->
         <div class="container" v-if="showProduct">
           <div class="row">
-            <div class="col-lg-4 col-md-6 d-flex">
+            <div v-for="product in products" class="col-lg-4 col-md-6 d-flex">
               <div class="lecture">
                 <img src="assets/images/science.png" class="img-fluid" alt="" />
                 <div class="lecture-details">
@@ -76,72 +77,30 @@
                   <h6>Location: <span v-text="product.location"></span></h6>
                   <h6>Price: <span v-text="product.price"></span></h6>
                 </div>
-                <button class="btn" v-on:click="addToCart" v-if="canAddToCart">
+                <button
+                  class="btn"
+                  v-on:click="addToCart(product)"
+                  v-if="canAddToCart(product)"
+                >
                   Add to Cart
                 </button>
                 <button class="btn" disabled="disabled" v-else>
                   Add to Cart
                 </button>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex">
-              <div class="lecture">
-                <img src="assets/images/maths.png" class="img-fluid" alt="" />
-                <div class="lecture-details">
-                  <h2>Maths</h2>
-                  <h6>Location: <span>Oxford</span></h6>
-                  <h6>Price: <span>£100</span></h6>
+                <span
+                  v-if="product.availableInventory === cartCount(product.id)"
+                  >All out!</span
+                >
+                <span
+                  v-else-if="product.availableInventory - cartCount(product.id) < 5"
+                  >Only {{product.availableInventory - cartCount(product.id)}}
+                  left!</span
+                >
+                <span v-else>Buy now!</span>
+                <div>
+                  <span v-for="n in product.rating">★</span>
+                  <span v-for="n in 5 - product.rating">☆</span>
                 </div>
-                <button class="btn">Add to Cart</button>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex">
-              <div class="lecture">
-                <img src="assets/images/english.png" class="img-fluid" alt="" />
-                <div class="lecture-details">
-                  <h2>English</h2>
-                  <h6>Location: <span>London</span></h6>
-                  <h6>Price: <span>£100</span></h6>
-                </div>
-                <button class="btn">Add to Cart</button>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex">
-              <div class="lecture">
-                <img src="assets/images/maths.png" class="img-fluid" alt="" />
-                <div class="lecture-details">
-                  <h2>Maths</h2>
-                  <h6>Location: <span>London</span></h6>
-                  <h6>Price: <span>£100</span></h6>
-                </div>
-                <button class="btn">Add to Cart</button>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex">
-              <div class="lecture">
-                <img src="assets/images/english.png" class="img-fluid" alt="" />
-                <div class="lecture-details">
-                  <h2>English</h2>
-                  <h6>Location: <span>York</span></h6>
-                  <h6>Price: <span>£100</span></h6>
-                </div>
-                <button class="btn">Add to Cart</button>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 d-flex">
-              <div class="lecture">
-                <img src="assets/images/science.png" class="img-fluid" alt="" />
-                <div class="lecture-details">
-                  <h2>Science</h2>
-                  <h6>Location: <span>Bristol</span></h6>
-                  <h6>Price: <span>£90</span></h6>
-                </div>
-                <button class="btn">Add to Cart</button>
               </div>
             </div>
           </div>
@@ -153,48 +112,14 @@
           <div class="checkout-form">
             <p>
               <strong>First Name:</strong>
-              <input v-model="order.firstName" />
+              <input v-model.trim="order.firstName" />
             </p>
             <p>
               <strong>Last Name:</strong>
-              <input v-model="order.lastName" />
+              <input v-model.trim="order.lastName" />
             </p>
-            <p><strong>Address: </strong> <input v-model="order.address" /></p>
-            <p><strong>City: </strong> <input v-model="order.city" /></p>
-            <p>
-              <strong>State:</strong>
-              <select v-model="order.state">
-                <option disabled value="">State</option>
-                <option>AL</option>
-                <option>AR</option>
-                <option>CA</option>
-                <option>NV</option>
-              </select>
-            </p>
-            <p>
-              <strong>Zip/Postal Code: </strong> <input v-model="order.zip" />
-            </p>
-
-            <p>
-              <input
-                type="checkbox"
-                id="gift"
-                value="true"
-                v-model="order.gift"
-              />
-              <label for="gift">Ship As Gift</label>
-            </p>
-
             <button v-on:click="submitForm">Place Orders</button>
           </div>
-
-          <h2>Order Information</h2>
-          <p>First Name: {{order.firstName}}</p>
-          <p>Last Name: {{order.lastName}}</p>
-          <p>Address: {{order.address}}</p>
-          <p>City: {{order.city}}</p>
-          <p>Zip: {{order.zip}}</p>
-          <p>State: {{order.state}}</p>
         </div>
       </section>
     </div>
