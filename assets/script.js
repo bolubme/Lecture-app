@@ -41,16 +41,6 @@ var webstore = new Vue({
       );
     },
 
-    cartCount(id) {
-      let count = 0;
-      for (let i = 0; i < this.cart.length; i++) {
-        if (this.cart[i] === id) {
-          count++;
-        }
-      }
-      return count;
-    },
-
     getProductById(productId) {
       return this.products.find((product) => product.id === productId);
     },
