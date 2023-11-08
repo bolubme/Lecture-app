@@ -50,7 +50,7 @@
           <ul class="navbar-nav flex-row">
             <a class="text-reset me-3" href="#">
               <button v-on:click="showCheckout" class="checkout">
-                Checkout <i class="fas fa-shopping-cart"></i>
+                <i class="fas fa-shopping-cart"></i>
                 <span class="cartNumber">{{cartItemCount}}</span>
               </button>
             </a>
@@ -120,6 +120,10 @@
                   <h2 v-text="product.subject"></h2>
                   <h6>Location: <span v-text="product.location"></span></h6>
                   <h6>Price: <span v-text="product.price"></span></h6>
+                  <div>
+                    <span v-for="n in product.rating">★</span>
+                    <span v-for="n in 5 - product.rating">☆</span>
+                  </div>
                 </div>
                 <button
                   class="btn"
@@ -131,19 +135,17 @@
                 <button class="btn" disabled="disabled" v-else>
                   Add to Cart
                 </button>
-                <span
-                  v-if="product.availableInventory === cartCount(product.id)"
-                  >All out!</span
-                >
-                <span
-                  v-else-if="product.availableInventory - cartCount(product.id) < 5"
-                  >Only {{product.availableInventory - cartCount(product.id)}}
-                  left!</span
-                >
-                <span v-else>Buy now!</span>
-                <div>
-                  <span v-for="n in product.rating">★</span>
-                  <span v-for="n in 5 - product.rating">☆</span>
+                <div class="">
+                  <span
+                    v-if="product.availableInventory === cartCount(product.id)"
+                    >All out!</span
+                  >
+                  <span
+                    v-else-if="product.availableInventory - cartCount(product.id) < 5"
+                    >Only {{product.availableInventory - cartCount(product.id)}}
+                    left!</span
+                  >
+                  <span v-else>Buy now!</span>
                 </div>
               </div>
             </div>
@@ -153,17 +155,94 @@
 
         <!-- Checkout page  -->
         <div v-else>
-          <h2 class="checkout-header">Checkout</h2>
-          <div class="checkout-form">
-            <p>
-              <strong>First Name:</strong>
-              <input v-model.trim="order.firstName" />
-            </p>
-            <p>
-              <strong>Last Name:</strong>
-              <input v-model.trim="order.lastName" />
-            </p>
-            <button v-on:click="submitForm">Place Orders</button>
+          <div class="checkout-Body">
+            <div class="container">
+              <h2 class="checkout-header">Checkout</h2>
+
+              <div class="row">
+                <div v-for="productId in cart" class="col-lg-4 col-md-6 d-flex">
+                  <div class="lecture">
+                    <img
+                      :src="getProductById(productId).image"
+                      :alt="getProductById(productId).subject"
+                      class="img-fluid"
+                    />
+                    <div class="lecture-details">
+                      <h2 v-text="getProductById(productId).subject"></h2>
+                      <h6>
+                        Location:
+                        <span
+                          v-text="getProductById(productId).location"
+                        ></span>
+                      </h6>
+                      <h6>
+                        Price:
+                        <span v-text="getProductById(productId).price"></span>
+                      </h6>
+                      <div>
+                        <span v-for="n in getProductById(productId).rating"
+                          >★</span
+                        >
+                        <span v-for="n in 5 - getProductById(productId).rating"
+                          >☆</span
+                        >
+                      </div>
+                    </div>
+                    <button class="btn" @click="removeFromCart(productId)">
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 50px" class="checkout-form">
+                <form>
+                  <p>
+                    <label for="name">Name</label>
+                    <input
+                      id="name"
+                      v-model.trim="order.firstName"
+                      required
+                      @input="validateName"
+                    />
+                    <span
+                      style="color: red; font-size: 12px"
+                      v-if="!isNameValid"
+                      >Input Only characters</span
+                    >
+
+                    <label for="number">Phone Number</label>
+                    <input
+                      id="number"
+                      v-model.trim="order.phoneNumber"
+                      required
+                      @input="validatePhoneNumber"
+                    />
+                    <span
+                      style="color: red; font-size: 12px"
+                      v-if="!isPhoneValid"
+                      >Number only</span
+                    >
+                  </p>
+                  <button
+                    style="border: 1px solid black"
+                    class="btn"
+                    v-on:click="submitForm"
+                    v-if="isFormValid"
+                  >
+                    Place Order
+                  </button>
+                  <button
+                    style="border: 1px solid black"
+                    class="btn"
+                    disabled="disabled"
+                    v-else
+                  >
+                    Place Order
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </section>
