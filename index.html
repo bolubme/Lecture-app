@@ -137,15 +137,10 @@
                   Add to Cart
                 </button>
                 <div class="">
-                  <span
-                    v-if="product.availableInventory === cartCount(product.id)"
-                    >All out!</span
-                  >
-                  <span
-                    v-else-if="product.availableInventory - cartCount(product.id) < 5"
-                    >Only {{product.availableInventory - cartCount(product.id)}}
-                    left!</span
-                  >
+                  <span v-if="product.availableInventory === 0">All out!</span>
+                  <span v-else-if="product.availableInventory < 5">
+                    Only {{ product.availableInventory }} left!
+                  </span>
                   <span v-else>Buy now!</span>
                 </div>
               </div>

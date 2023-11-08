@@ -16,8 +16,16 @@ var webstore = new Vue({
     searchText: "",
   },
   methods: {
+    productIndex(product) {
+      return this.products.findIndex((p) => p.id === product.id);
+    },
+
     addToCart(product) {
-      this.cart.push(product.id);
+      const index = this.productIndex(product);
+      if (index !== -1 && this.canAddToCart(product)) {
+        this.cart.push(product.id);
+        this.products[index].availableInventory--;
+      }
     },
     showCheckout() {
       if (this.cart.length > 0) {
@@ -26,7 +34,11 @@ var webstore = new Vue({
     },
 
     canAddToCart(product) {
-      return product.availableInventory > this.cartCount(product.id);
+      const productIndex = this.productIndex(product);
+      return (
+        productIndex !== -1 &&
+        this.products[productIndex].availableInventory > 0
+      );
     },
 
     cartCount(id) {
@@ -50,6 +62,13 @@ var webstore = new Vue({
       const index = this.cart.indexOf(productId);
       if (index !== -1) {
         this.cart.splice(index, 1);
+        const product = this.getProductById(productId);
+        if (product) {
+          const productIndex = this.productIndex(product);
+          if (productIndex !== -1) {
+            this.products[productIndex].availableInventory++;
+          }
+        }
       }
     },
 
@@ -62,25 +81,21 @@ var webstore = new Vue({
       const pattern = /^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/;
       this.isPhoneValid = pattern.test(this.order.phoneNumber);
     },
-    resetCheckout() {
+
+    submitForm() {
+      alert("Order Submitted!");
+      this.showProduct = true;
       this.cart = [];
       this.order.firstName = "";
       this.order.phoneNumber = "";
-      this.showProduct = true;
-    },
-
-    submitForm() {
-      setTimeout(function () {
-        alert("Order Submitted!");
-        this.resetCheckout();
-      }, 1000);
+      this.isNameValid = false;
+      this.isPhoneValid = false;
     },
   },
   computed: {
     cartItemCount: function () {
       return this.cart.length || "";
     },
-
     filteredProducts() {
       const query = this.searchText.toLowerCase();
       let filtered = this.products.filter((product) => {
