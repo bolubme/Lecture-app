@@ -40,6 +40,7 @@
                 class="form-control rounded"
                 placeholder="Search"
                 style="min-width: 125px"
+                v-model="searchText"
               />
               <span class="input-group-text border-0 d-lg-flex"
                 ><i class="fas fa-search"></i
@@ -107,7 +108,7 @@
           <!-- ======= Product Cards ======= -->
           <div class="row">
             <div
-              v-for="product in sortedProducts"
+              v-for="product in filteredProducts"
               class="col-lg-4 col-md-6 d-flex"
             >
               <div class="lecture">

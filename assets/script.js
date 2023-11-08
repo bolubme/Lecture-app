@@ -13,6 +13,7 @@ var webstore = new Vue({
     sortField: "Location",
     isNameValid: false,
     isPhoneValid: false,
+    searchText: "",
   },
   methods: {
     addToCart(product) {
@@ -61,11 +62,17 @@ var webstore = new Vue({
       const pattern = /^(\(?(0|\+44)[1-9]{1}\d{1,4}?\)?\s?\d{3,4}\s?\d{3,4})$/;
       this.isPhoneValid = pattern.test(this.order.phoneNumber);
     },
+    resetCheckout() {
+      this.cart = [];
+      this.order.firstName = "";
+      this.order.phoneNumber = "";
+      this.showProduct = true;
+    },
 
     submitForm() {
       setTimeout(function () {
         alert("Order Submitted!");
-        this.cart = [];
+        this.resetCheckout();
       }, 1000);
     },
   },
@@ -73,15 +80,19 @@ var webstore = new Vue({
     cartItemCount: function () {
       return this.cart.length || "";
     },
-    itemsLeft() {
-      return this.product.availableInventory - this.cartItemCount;
-    },
-    sortedProducts() {
+
+    filteredProducts() {
+      const query = this.searchText.toLowerCase();
+      let filtered = this.products.filter((product) => {
+        const subject = product.subject.toLowerCase();
+        const location = product.location.toLowerCase();
+        return subject.includes(query) || location.includes(query);
+      });
+
       const field = this.sortField.toLowerCase();
-      console.log(field);
       let order = this.filterOption === "ascending" ? 1 : -1;
 
-      return this.products.slice().sort((a, b) => {
+      return filtered.slice().sort((a, b) => {
         if (field === "location")
           return order * a.location.localeCompare(b.location);
         if (field === "price") return order * (a.price - b.price);
