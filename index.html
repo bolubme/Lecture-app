@@ -18,11 +18,14 @@
     <!-- Main Css File -->
     <link rel="stylesheet" href="assets/style.css" />
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
-    <script src="assets/products.js"></script>
   </head>
   <body>
     <!-- Vue App -->
     <div id="app">
+      <!-- Loader section -->
+      <div v-if="isDataLoading" class="loader-container">
+        <div class="loader"></div>
+      </div>
       <!-- ======= NavBar Section ======= -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid justify-content-between">
@@ -164,27 +167,27 @@
                 <div v-for="productId in cart" class="col-lg-4 col-md-6 d-flex">
                   <div class="lecture">
                     <img
-                      :src="getProductById(productId).image"
-                      :alt="getProductById(productId).subject"
+                      :src="productId.image"
+                      :alt="productId.subject"
                       class="img-fluid"
                     />
                     <div class="lecture-details">
-                      <h2 v-text="getProductById(productId).subject"></h2>
+                      <h2 v-text="productId.subject"></h2>
                       <h6>
                         Location:
                         <span
-                          v-text="getProductById(productId).location"
+                          v-text="productId.location"
                         ></span>
                       </h6>
                       <h6>
                         Price:
-                        <span v-text="getProductById(productId).price"></span>
+                        <span v-text="productId.price"></span>
                       </h6>
                       <div>
-                        <span v-for="n in getProductById(productId).rating"
+                        <span v-for="n in productId.rating"
                           >★</span
                         >
-                        <span v-for="n in 5 - getProductById(productId).rating"
+                        <span v-for="n in 5 - productId.rating"
                           >☆</span
                         >
                       </div>
@@ -228,7 +231,7 @@
                   <button
                     style="border: 1px solid black"
                     class="btn"
-                    v-on:click="submitForm"
+                    v-on:click="orderNow"
                     v-if="isFormValid"
                   >
                     Place Order

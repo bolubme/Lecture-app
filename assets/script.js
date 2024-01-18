@@ -2,7 +2,7 @@ var webstore = new Vue({
   el: "#app",
   data: {
     siteheader: "After School Club",
-    products: products,
+    products: [],
     showProduct: true,
     order: {
       firstName: "",
@@ -11,22 +11,51 @@ var webstore = new Vue({
     cart: [],
     filterOption: "ascending",
     sortField: "Location",
+    isLoading: true,
     isNameValid: false,
     isPhoneValid: false,
     searchText: "",
   },
   methods: {
+    init() {
+      this.showProduct = true;
+      this.cart = [];
+      this.order.firstName = "";
+      this.order.phoneNumber = "";
+      this.isNameValid = false;
+      this.isPhoneValid = false;
+    },
+
     productIndex(product) {
       return this.products.findIndex((p) => p.id === product.id);
+    },
+
+    updateAvailability(id, spaceNum) {
+      fetch("https://lecture-app.onrender.com/collections/lectures/" + id, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          availableInventory: spaceNum,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          return data;
+        })
+        .catch((err) => {
+          return data;
+        });
     },
 
     addToCart(product) {
       const index = this.productIndex(product);
       if (index !== -1 && this.canAddToCart(product)) {
-        this.cart.push(product.id);
+        this.cart.push(product);
         this.products[index].availableInventory--;
       }
+      console.log(product);
     },
+
     showCheckout() {
       if (this.cart.length > 0) {
         this.showProduct = !this.showProduct;
@@ -45,20 +74,30 @@ var webstore = new Vue({
       return this.products.find((product) => product.id === productId);
     },
 
-    removeFromCart(productId) {
+    loadLessonData: async function () {
+      console.log("Collecting database from lessons...");
+      try {
+        const response = await fetch(
+          "https://lecture-app.onrender.com/collections/lectures"
+        );
+        const json = await response.json();
+        this.products = json;
+        this.isLoading = false;
+      } catch (error) {
+        console.error("Error loading lesson data:", error);
+        this.isLoading = false;
+      }
+    },
+
+    removeFromCart(product) {
       if (this.cart.length === 1) {
         this.showProduct = true;
       }
-      const index = this.cart.indexOf(productId);
-      if (index !== -1) {
+      const index = this.cart.indexOf(product);
+      if (index !== 1) {
         this.cart.splice(index, 1);
-        const product = this.getProductById(productId);
-        if (product) {
-          const productIndex = this.productIndex(product);
-          if (productIndex !== -1) {
-            this.products[productIndex].availableInventory++;
-          }
-        }
+        const productIndex = this.productIndex(product);
+        this.products[productIndex].availableInventory++;
       }
     },
 
@@ -72,20 +111,44 @@ var webstore = new Vue({
       this.isPhoneValid = pattern.test(this.order.phoneNumber);
     },
 
-    submitForm() {
+    orderNow() {
+      const orderData = [];
+      this.cart.forEach((lectures) => {
+        orderData.push({ id: lectures.id });
+        this.updateAvailability(lectures._id, lectures.availableInventory);
+      });
+      console.log(orderData);
+
       alert("Order Submitted!");
-      this.showProduct = true;
-      this.cart = [];
-      this.order.firstName = "";
-      this.order.phoneNumber = "";
-      this.isNameValid = false;
-      this.isPhoneValid = false;
+      const url = "https://lecture-app.onrender.com/collections/orders";
+      const data = {
+        name: this.order.firstName,
+        phone: this.order.phoneNumber,
+        lessonsOrdered: orderData,
+      };
+      this.init()
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log("Success:", data))
+        .catch((error) => console.error("Error:", error));
     },
   },
   computed: {
+    isDataLoading() {
+      return this.isLoading;
+    },
+
     cartItemCount: function () {
       return this.cart.length || "";
     },
+
     filteredProducts() {
       const query = this.searchText.toLowerCase();
       let filtered = this.products.filter((product) => {
@@ -113,5 +176,9 @@ var webstore = new Vue({
     isFormValid() {
       return this.isNameValid && this.isPhoneValid;
     },
+  },
+
+  created: function () {
+    this.loadLessonData();
   },
 });
