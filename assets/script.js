@@ -14,7 +14,9 @@ var webstore = new Vue({
     isLoading: true,
     isNameValid: false,
     isPhoneValid: false,
-    searchText: "",
+    searchWord: "",
+    searchTemp: [],
+    filterTemp: false
   },
   methods: {
     init() {
@@ -22,8 +24,9 @@ var webstore = new Vue({
       this.cart = [];
       this.order.firstName = "";
       this.order.phoneNumber = "";
-      this.isNameValid = false;
+      (this.searchWord = ""), (this.isNameValid = false);
       this.isPhoneValid = false;
+      this.loadLessonData();
     },
 
     productIndex(product) {
@@ -48,13 +51,17 @@ var webstore = new Vue({
     },
 
     addToCart(product) {
-      const index = this.productIndex(product);
-      if (index !== -1 && this.canAddToCart(product)) {
-        this.cart.push(product);
-        this.products[index].availableInventory--;
+      const foundProduct =
+        this.searchWord === ""
+          ? this.products.find((p) => p.id === product.id)
+          : this.searchTemp.find((p) => p.id === product.id);
+    
+      if (foundProduct && this.canAddToCart(foundProduct)) {
+        this.cart.push(foundProduct);
+        foundProduct.availableInventory--;
       }
-      console.log(product);
     },
+    
 
     showCheckout() {
       if (this.cart.length > 0) {
@@ -74,19 +81,26 @@ var webstore = new Vue({
       return this.products.find((product) => product.id === productId);
     },
 
-    loadLessonData: async function () {
-      console.log("Collecting database from lessons...");
-      try {
-        const response = await fetch(
-          "https://lecture-app.onrender.com/collections/lectures"
-        );
-        const json = await response.json();
-        this.products = json;
-        this.isLoading = false;
-      } catch (error) {
-        console.error("Error loading lesson data:", error);
-        this.isLoading = false;
-      }
+    loadLessonData: function () {
+      console.log("Collecting lessons from database...");
+
+      const url = "https://lecture-app.onrender.com/collections/lectures";
+
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data. Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((json) => {
+          this.products = json;
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          console.error("Error loading lesson data:", error);
+          this.isLoading = false;
+        });
     },
 
     removeFromCart(product) {
@@ -114,10 +128,9 @@ var webstore = new Vue({
     orderNow() {
       const orderData = [];
       this.cart.forEach((lectures) => {
-        orderData.push({ id: lectures.id });
+        orderData.push({ id: lectures.id, courseName: lectures.subject });
         this.updateAvailability(lectures._id, lectures.availableInventory);
       });
-      console.log(orderData);
 
       alert("Order Submitted!");
       const url = "https://lecture-app.onrender.com/collections/orders";
@@ -126,7 +139,7 @@ var webstore = new Vue({
         phone: this.order.phoneNumber,
         lessonsOrdered: orderData,
       };
-      this.init()
+      this.init();
 
       fetch(url, {
         method: "POST",
@@ -139,6 +152,48 @@ var webstore = new Vue({
         .then((data) => console.log("Success:", data))
         .catch((error) => console.error("Error:", error));
     },
+
+    findProductsByObjects(searchObjects) {
+      const result = [];
+
+      searchObjects.forEach((searchObj) => {
+        const foundProduct = this.products.find((product) => {
+          return product._id === searchObj._id;
+        });
+
+        if (foundProduct) {
+          result.push(foundProduct);
+        }
+      });
+
+      return result;
+    },
+
+    search() {
+      if (this.searchWord.length > 0) {
+        this.fetchSearchResults();
+      } else {
+      }
+    },
+    fetchSearchResults() {
+      const query = encodeURIComponent(this.searchWord);
+      const url = `http://localhost:3030/collections/lectures/search/${query}`;
+
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // this.products = data
+          this.searchTemp = this.findProductsByObjects(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching search results:", error);
+        });
+    },
   },
   computed: {
     isDataLoading() {
@@ -150,17 +205,17 @@ var webstore = new Vue({
     },
 
     filteredProducts() {
-      const query = this.searchText.toLowerCase();
-      let filtered = this.products.filter((product) => {
-        const subject = product.subject.toLowerCase();
-        const location = product.location.toLowerCase();
-        return subject.includes(query) || location.includes(query);
-      });
-
       const field = this.sortField.toLowerCase();
       let order = this.filterOption === "ascending" ? 1 : -1;
-
-      return filtered.slice().sort((a, b) => {
+    
+      let filterList;
+      if (this.searchWord === "") {
+        filterList = this.products;
+      } else {
+        filterList = this.searchTemp;
+      }
+    
+      return filterList.slice().sort((a, b) => {
         if (field === "location")
           return order * a.location.localeCompare(b.location);
         if (field === "price") return order * (a.price - b.price);
@@ -172,6 +227,7 @@ var webstore = new Vue({
         return 0;
       });
     },
+    
 
     isFormValid() {
       return this.isNameValid && this.isPhoneValid;

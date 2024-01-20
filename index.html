@@ -43,11 +43,9 @@
                 class="form-control rounded"
                 placeholder="Search"
                 style="min-width: 125px"
-                v-model="searchText"
+                v-model="searchWord"
+                @input="search" 
               />
-              <span class="input-group-text border-0 d-lg-flex"
-                ><i class="fas fa-search"></i
-              ></span>
             </form>
           </ul>
 
@@ -116,7 +114,7 @@
             >
               <div class="lecture">
                 <img
-                  :src="product.image"
+                  v-bind:src="product.image"
                   :alt="product.subject"
                   class="img-fluid"
                 />
