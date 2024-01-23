@@ -177,7 +177,7 @@ var webstore = new Vue({
     },
     fetchSearchResults() {
       const query = encodeURIComponent(this.searchWord);
-      const url = `http://localhost:3030/collections/lectures/search/${query}`;
+      const url = `https://lecture-app.onrender.com/collections/lectures/search/${query}`
 
       fetch(url)
         .then((response) => {
