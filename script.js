@@ -18,6 +18,7 @@ var webstore = new Vue({
     searchTemp: [],
     filterTemp: false
   },
+
   methods: {
     init() {
       this.showProduct = true;
@@ -196,6 +197,11 @@ var webstore = new Vue({
     },
   },
   computed: {
+
+    created() {
+
+    },
+    
     isDataLoading() {
       return this.isLoading;
     },
@@ -236,5 +242,8 @@ var webstore = new Vue({
 
   created: function () {
     this.loadLessonData();
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
   },
 });

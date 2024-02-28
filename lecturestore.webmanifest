@@ -1,0 +1,38 @@
+{
+    "name": "My Lecture PWA",
+    "short_name": "Lecturestore",
+    "description": "My online lecture store",
+    "icons": [
+      {
+        "src": "images/bigLogo.png",
+        "sizes": "500x500",
+        "type": "image/png"
+      },
+      {
+        "src": "images/smallLogo.png",
+        "sizes": "193x193",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "background_color": "#fab300",
+    "orientation": "portrait",
+    "screenshots": [
+      {
+       "src": "images/bigLogo.png",
+       "sizes": "500x500",
+       "type": "image/png",
+       "form_factor": "narrow",
+       "label": "Logo lecture"
+      },
+      {
+        "src": "images/bigLogo.png",
+        "sizes": "500x500",
+        "type": "image/png",
+        "form_factor": "wide",
+        "label": "Logo lecture"
+       }
+  ]
+  }
+  
